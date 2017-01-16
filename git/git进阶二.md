@@ -1,6 +1,5 @@
 【跳坑指南-Git】
-[git进阶一](https://github.com/zhuang137/blog/blob/master/git/git%E8%BF%9B%E9%98%B6%E4%B8%80.md)
-看过上一节的童鞋估计还有一些疑问：
+看过[上一节git进阶一](https://github.com/zhuang137/blog/blob/master/git/git%E8%BF%9B%E9%98%B6%E4%B8%80.md)的童鞋估计还有一些疑问：
 1)git reset --hard FETCH_HEAD到底多神奇
 2)为啥要对比那两个commit id
 3)提交的时候为啥要用git pull && git push，这中间的两个&符号是干啥子用的
