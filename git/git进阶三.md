@@ -1,7 +1,7 @@
 【跳坑指南-Git】<br>
-    访问之前的文章：
-    ![git进阶一](https://github.com/zhuang137/blog/blob/master/git/git%E8%BF%9B%E9%98%B6%E4%B8%80.md)
-    ![git进阶二](https://github.com/zhuang137/blog/blob/master/git/git%E8%BF%9B%E9%98%B6%E4%BA%8C.md)<br>
+###访问之前的文章:<br>
+[git进阶一](https://github.com/zhuang137/blog/blob/master/git/git%E8%BF%9B%E9%98%B6%E4%B8%80.md)<br>
+[git进阶二](https://github.com/zhuang137/blog/blob/master/git/git%E8%BF%9B%E9%98%B6%E4%BA%8C.md)<br>
 ##本文主要讲解两个知识点：
     1. 回退git版本提交
     2. patch补丁文件的应用
@@ -14,9 +14,11 @@
     B:你个笨蛋，百度过了还问我干屁。看你看文章的份上，我再给你细讲一回。<br>
 ```Bash
 git reset --hard FETCH_HEAD
+```
 ####回退到最后与服务器同步代码时的位置。如果你上次同步代码是10天前，那么你的代码就太老了。
 ```Bash
 git reset --hard HEAD^10<br>
+```
     B:纳尼，出错了，啥情况？这里我贴上gif图大家看一下
 ![image](https://github.com/zhuang137/blog/blob/master/picture/git3.gif "git3")<br>
     B:我擦，怎么出错了？你知道为啥出错吗？你帮我看一下出错的log
