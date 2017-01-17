@@ -1,10 +1,10 @@
 【跳坑指南-Git】<br>
 ###访问之前的文章:<br>
-[git进阶一](https://github.com/zhuang137/blog/blob/master/git/git%E8%BF%9B%E9%98%B6%E4%B8%80.md)
-[git进阶二](https://github.com/zhuang137/blog/blob/master/git/git%E8%BF%9B%E9%98%B6%E4%BA%8C.md)
+[git进阶一](https://github.com/zhuang137/blog/blob/master/git/git%E8%BF%9B%E9%98%B6%E4%B8%80.md)<br>
+[git进阶二](https://github.com/zhuang137/blog/blob/master/git/git%E8%BF%9B%E9%98%B6%E4%BA%8C.md)<br>
 ##本文主要讲解git回退：
-    note:1)前两节不懂得别继续看下去了，真的。
-         2)回退大神可以跳过去本节了
+    note:1)前两节不懂得别继续看下去了，真的。<br>
+         2)回退大神可以跳过去本节了<br>
 ###回退git版本历史
     A:老板，在git进阶一中，你说要使用git reset --hard FETCH_HEAD,然后你在进阶二也说了，这是保证了本分支的代码与服务器
       一致。能不能说一下回退的时候需要注意什么啊
