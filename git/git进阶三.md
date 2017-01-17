@@ -21,6 +21,7 @@ git reset --hard HEAD^10
 ```
     B:纳尼，出错了，啥情况？这里我贴上gif图大家看一下
 ![image](https://github.com/zhuang137/blog/blob/master/picture/git3.gif "git3")
+----------
     B:我擦，怎么出错了？你知道为啥出错吗？你帮我看一下出错的log
     A:HEAD^2或者HEAD^5这些都会出错，提示unknown revision or path not in the working tree，这意思不就是参数不正确吗？
     B：哈哈哈，其实这些出错我是故意的，为了让你印象深刻。其实这个^后面加上一个数字，一般来说1肯定不会出错，为啥大于2的时候会
