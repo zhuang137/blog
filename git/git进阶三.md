@@ -2,10 +2,9 @@
 ###访问之前的文章:<br>
 [git进阶一](https://github.com/zhuang137/blog/blob/master/git/git%E8%BF%9B%E9%98%B6%E4%B8%80.md)
 [git进阶二](https://github.com/zhuang137/blog/blob/master/git/git%E8%BF%9B%E9%98%B6%E4%BA%8C.md)
-##本文主要讲解两个知识点：
-    1. 回退git版本提交
-    2. patch补丁文件的应用
-
+##本文主要讲解git回退：
+    note:1)前两节不懂得别继续看下去了，真的。
+         2)回退大神可以跳过去本节了
 ###回退git版本历史
     A:老板，在git进阶一中，你说要使用git reset --hard FETCH_HEAD,然后你在进阶二也说了，这是保证了本分支的代码与服务器
       一致。能不能说一下回退的时候需要注意什么啊
@@ -49,5 +48,5 @@ git merge a b c
     A:我曹，我记住了。
     B：一定要记住了，过几天考考你。忘了的话就画个圈圈扣你工资
     A:老大，我要忘了，我就给你发红包(#我曹，发红包我喜欢)
-    
-    
+----------
+![image](https://github.com/zhuang137/blog/blob/master/picture/xinlang.jpg)
