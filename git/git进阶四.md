@@ -7,8 +7,7 @@
 --------
 ##本文主要讲解：
     note:1)patch打包以及使用！
-         2)commit msg相关命令！
-
+         2)commit msg相关命令！<br>
 ----
 ###patch打包以及使用
     A:老大，你上一节说用git reset --hard FETCH_HEAD,然后使用git pull同步服务器的代码。我辛辛苦苦搞了好久的代码<br>
