@@ -39,3 +39,18 @@ git format-patch -M patch-base-branch
 ![image](https://github.com/zhuang137/blog/blob/master/picture/git4.gif "git4.gif")
 
     B:这条命令记住就行了。当然，还有其他途径，不过目前我只熟悉这个命令，对于我们的日常最够了。
+-----
+###commit msg相关命令
+    A:老大，我提交的时候一般使用命令git commit，然后跳出来一个我不会用的编辑器让我修改msg，这个编辑器完全不会用
+    B:我喜欢用vim，用git config --global core.editor vim就行了
+    A:那我用gedit吧，vim完全不会用。
+    B:用什么编辑器无所谓，都是习惯问题，我用vi习惯了，大概有一年没用过其他IDE了，代码都是手写的。(可能影响效率吧)
+    （壮老大会在以后的教程中录制视频，让你们感触到vim的上手是有多简单，哈哈）
+    A:老大，我现在有一个需求，但是我本地没搞好，一个需求搞了两个提交，能否把这两个合并为一个。
+    B:恩，你这个需求提的好，当然是有办法的，也很简单。使用git rebase HEAD~2 -i，然后打开的页面你会发现帮助文档。
+----
+![image](https://github.com/zhuang137/blog/blob/master/picture/git4-2.gif "git4-2.gif")
+
+    B:帮助文档是不是有很多个选项，我们常用的就是edit squash fixup这三个
+    A：那这三个都干啥的？
+    B:你自己看英文吧，小伙。这三个很重要，我讲了一个，还有两个，都很重要的，你自己百度一下吧
