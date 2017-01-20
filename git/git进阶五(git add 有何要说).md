@@ -48,7 +48,7 @@
 ![image](https://github.com/zhuang137/blog/blob/master/picture/git5-3.gif)
 -----
 
-:broken_heart，哈哈，东京热.av变成乱码了，这是我这边终端的原因，哈哈，不要在意这么多细节
+:broken_heart:，哈哈，`东京热`.av变成乱码了，这是我这边终端的原因，哈哈，不要在意这么多细节
 
 -----
     A:恩，那不止一两个文件怎么办?
