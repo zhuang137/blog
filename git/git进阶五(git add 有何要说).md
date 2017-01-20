@@ -47,6 +47,10 @@
 ----
 ![image](https://github.com/zhuang137/blog/blob/master/picture/git5-3.gif)
 -----
+```Bash
+-_-，哈哈，东京热.av变成乱码了，这是我这边终端的原因，哈哈，不要在意这么多细节
+```
+-----
     A:恩，那不止一两个文件怎么办?
     B:兄弟，看多了伤身，搞那么多干毛线啊，要都被你弄服务器了，成千上万的同事都要流鼻血啊。现在只有一个办法，不会
       shell脚本就慢慢add吧，除非你用神器git reset --hard FETCH_HEAD，然后把工作分支弄干净，最后git add .一
