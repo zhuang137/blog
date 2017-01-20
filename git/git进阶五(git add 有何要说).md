@@ -67,4 +67,15 @@
     B：其实这两个都是指向某次提交的commit id的，只是FETCH_HEAD指向服务器那个commit id，HEAD指向的是我需要回退到
       的那个commit版本，你真正成为大神了，会运用自如的。因为我没讲过git目录深入研究，你可以百度一下，这个还是可以去
       网上看一下的。
+    A:老大，这个git add命令以及git rm放一块讲原来是这原因啊，因为git rm封装了git add啊
+    B:聪明，但是也做了一些其他处理，我们不必要再深究。不过，我可以稍微再提一点。在我们git add之前其实git仓库会立即对
+      当前工作目录的变动信息做保存，你不信在add之前可以git diff查看一下。但是这个变动的保存只是临时的而已，git也并不
+      认为这是我们真正重要的东西。除非我们使用git add以及git commit，才会真正保存。其实，我们从.git/index文件的变化
+      就可以看出来。
+----
+![image](https://github.com/zhuang137/blog/blob/master/picture/git5-6.gif)
+----
+    A:奥，原来是这样啊，发明git的人太牛逼了。
+    B:是的，但是我们要站在巨人肩膀上看问题，而且要看的更远，好好工作小伙。下一节我给你讲讲git pull相关命令，也是很重要
+      的额，不要就会使用git pull去拉代码。
     
