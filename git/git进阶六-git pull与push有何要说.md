@@ -11,7 +11,7 @@
 ###能够立马学会很多，二来也为了以后自己查询方便。三嘛，锻炼自己的写文档能力。<br>
 ##本文主要讲解：
     note:1)git pull命令
-         2)git fetch命令
+         2)git push命令
 
 ----
 ###git pull命令
@@ -20,3 +20,10 @@
 ----
 
 ![image](https://github.com/zhuang137/blog/blob/master/picture/git6-1.gif)
+<br>
+      图中使用了命令git config branch.test.remote URL,这里的URL可以是https类似的地址，也可以是一个你的remote名字.
+    你可以使用git remote -v查看一下你的remote name有几对儿（fetch跟push是一对儿）.图中的URL就是blog了.
+      你如果想自己添加一些remote name，那就用git remote add xiaosan https:avav.com 这种形式去加，name可以随便起.
+    地址有点邪恶了，千万别点开额，哈哈！然后图中还有一个merge以及rebase这个东西，我们运行了命令git config branch.test
+    .merge refs/heads/master，这个东西是git pull中关键的东西，没有这个东西你当前分支更新不了；rebase其实可以选择，其
+    实就是git pull --rebase的意思。
