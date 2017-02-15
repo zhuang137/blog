@@ -19,9 +19,9 @@
     说你拉代码肯定要从服务器拉取，然后这个服务器地址你需要指定。看下图
 ----
 
-![image](https://github.com/zhuang137/blog/blob/master/picture/git6-1.gif)
+![image](https://github.com/zhuang137/blog/blob/master/picture/git6-1.gif)<br>
+----
 <br>
-    
       图中使用了命令git config branch.test.remote URL,这里的URL可以是https类似的地址，也可以是一个你的remote名字.
     你可以使用git remote -v查看一下你的remote name有几对儿（fetch跟push是一对儿）.图中的URL就是blog了.
       你如果想自己添加一些remote name，那就用git remote add xiaosan https:avav.com 这种形式去加，name可以随便起.
