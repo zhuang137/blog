@@ -26,4 +26,4 @@
       你如果想自己添加一些remote name，那就用git remote add xiaosan https:avav.com 这种形式去加，name可以随便起.
     地址有点邪恶了，千万别点开额，哈哈！然后图中还有一个merge以及rebase这个东西，我们运行了命令git config branch.test
     .merge refs/heads/master，这个东西是git pull中关键的东西，没有这个东西你当前分支更新不了；rebase其实可以选择，其
-    实就是git pull --rebase的意思。
+    实就是git pull --rebase的意思.
