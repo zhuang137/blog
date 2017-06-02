@@ -1,0 +1,257 @@
+commit 5c2c14ea90571e57f9bb40f55740c6f1de620e2b
+Author: liuzz4 <liuzz4@lenovo.com>
+Date:   Wed Apr 19 16:55:26 2017 +0800
+
+    <YETI_N><touchpad><liuzz4> add touchpad disable function
+    
+        [issue] [YETIN-456] fixed
+    
+        [rootcause]
+    
+        [solution]
+    
+    Change-Id: I63bfc27dd33fe8ea48b6211bd12f67321c81997b
+
+diff --git a/services/inputflinger/Android.mk b/services/inputflinger/Android.mk
+index 16c934c..e459c9a 100644
+--- a/services/inputflinger/Android.mk
++++ b/services/inputflinger/Android.mk
+@@ -56,7 +56,11 @@ LOCAL_SHARED_LIBRARIES := \
+ 
+ # TODO: Move inputflinger to its own process and mark it hidden
+ #LOCAL_CFLAGS += -fvisibility=hidden
+-
++#liuzz4 begin
++ifneq ($(SWITCH_TOUCHPAD_SOLUTION_DISABLE),true)
++LOCAL_CFLAGS += -DSWITCH_TOUCHPAD_SOLUTION
++endif
++#liuzz4 end
+ LOCAL_CFLAGS += -Wno-unused-parameter
+ 
+ LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)
+diff --git a/services/inputflinger/EventHub.cpp b/services/inputflinger/EventHub.cpp
+index baad395..1637e7a 100644
+--- a/services/inputflinger/EventHub.cpp
++++ b/services/inputflinger/EventHub.cpp
+@@ -63,7 +63,8 @@
+ #define INDENT "  "
+ #define INDENT2 "    "
+ #define INDENT3 "      "
+-
++//#define SWITCH_TOUCHPAD_SOLUTION
++#define DEBUG_SWITCH_TOUCHPAD 0
+ namespace android {
+ 
+ static const char *WAKE_LOCK_ID = "KeyEvents";
+@@ -927,9 +928,27 @@ size_t EventHub::getEvents(int timeoutMillis, RawEvent* buffer, size_t bufferSiz
+             }
+ 
+             Device* device = mDevices.valueAt(deviceIndex);
++
++#ifdef SWITCH_TOUCHPAD_SOLUTION
++            bool tpad_switch_on = true;
++            char switchpad_value_str[PROPERTY_VALUE_MAX];
++            property_get("persist.sys.tpadon", switchpad_value_str, "1");
++            int tpad_value = atoi(switchpad_value_str);
++            if (!strcmp(device->identifier.name, "lenovo-smartpad_touch") && tpad_value == 0) {
++                tpad_switch_on = false;
++            }
++#endif //SWITCH_TOUCHPAD_SOLUTION
+             if (eventItem.events & EPOLLIN) {
+                 int32_t readSize = read(device->fd, readBuffer,
+                         sizeof(struct input_event) * capacity);
++#ifdef SWITCH_TOUCHPAD_SOLUTION
++                if (!tpad_switch_on) {
++#if DEBUG_SWITCH_TOUCHPAD
++                    ALOGW("lenovo-smart_touchpad ignores all the event when persist.sys.tpadon equals 0");
++#endif //DEBUG_SWITCH_TOUCHPAD
++                    continue ;
++                } else
++#endif //SWITCH_TOUCHPAD_SOLUTION
+                 if (readSize == 0 || (readSize < 0 && errno == ENODEV)) {
+                     // Device was removed before INotify noticed.
+                     ALOGW("could not get event, removed? (fd: %d size: %" PRId32
+diff --git a/services/inputflinger/InputReader.cpp b/services/inputflinger/InputReader.cpp
+index b801c37..7fed5ab 100644
+--- a/services/inputflinger/InputReader.cpp
++++ b/services/inputflinger/InputReader.cpp
+@@ -586,6 +586,17 @@ void InputReader::processEventsForDeviceLocked(int32_t deviceId,
+     device->process(rawEvents, count);
+ }
+ 
++void InputReader::clearGestureState(const char* deviceName) {
++    for (size_t i =0; i< mDevices.size(); i++) {
++        InputDevice* device = mDevices.valueAt(i);
++        if (!strcmp(device->getName().string(), deviceName)) {
++            ALOGW("device found for %s ,clearGestureState",deviceName);
++            device->clearGestureState();
++            break;
++        }
++    }
++}
++
+ void InputReader::timeoutExpiredLocked(nsecs_t when) {
+     for (size_t i = 0; i < mDevices.size(); i++) {
+         InputDevice* device = mDevices.valueAt(i);
+@@ -1014,6 +1025,14 @@ bool InputReaderThread::threadLoop() {
+ 
+ // --- InputDevice ---
+ 
++void InputDevice::clearGestureState() {
++    size_t numMappers = mMappers.size();
++    for (size_t i = 0; i < numMappers; i++) {
++        InputMapper* mapper = mMappers[i];
++        mapper->clearGestureState();
++    }
++}
++
+ InputDevice::InputDevice(InputReaderContext* context, int32_t id, int32_t generation,
+         int32_t controllerNumber, const InputDeviceIdentifier& identifier, uint32_t classes) :
+         mContext(context), mId(id), mGeneration(generation), mControllerNumber(controllerNumber),
+@@ -1153,6 +1172,7 @@ void InputDevice::process(const RawEvent* rawEvents, size_t count) {
+         } else {
+             for (size_t i = 0; i < numMappers; i++) {
+                 InputMapper* mapper = mMappers[i];
++                //mapper->clearGestureState();
+                 mapper->process(rawEvent);
+             }
+         }
+@@ -1990,6 +2010,10 @@ InputMapper::InputMapper(InputDevice* device) :
+ InputMapper::~InputMapper() {
+ }
+ 
++void InputMapper::clearGestureState() {
++
++}
++
+ void InputMapper::populateDeviceInfo(InputDeviceInfo* info) {
+     info->addSource(getSources());
+ }
+@@ -3124,6 +3148,25 @@ uint32_t TouchInputMapper::getSources() {
+     return mSource;
+ }
+ 
++void TouchInputMapper::clearGestureState() {
++    mRawStatesPending.clear();
++    mCurrentRawState.clear();
++    mCurrentCookedState.clear();
++    mLastRawState.clear();
++    mLastCookedState.clear();
++    mPointerUsage = POINTER_USAGE_NONE;
++    mSentHoverEnter = false;
++    mHavePointerIds = false;
++    mCurrentMotionAborted = false;
++    mDownTime = 0;
++
++    mCurrentVirtualKey.down = false;
++
++    mPointerGesture.reset();
++    mPointerSimple.reset();
++    mPointerVelocityControl.reset();
++}
++
+ void TouchInputMapper::populateDeviceInfo(InputDeviceInfo* info) {
+     InputMapper::populateDeviceInfo(info);
+ 
+@@ -8328,7 +8371,6 @@ void YetiTpAccumulator::process(const RawEvent* rawEvent) {
+         } else if (mCurrentSlot < 0) {
+             mCurrentSlot = 0;
+         }
+-
+         if (mCurrentSlot < 0 || size_t(mCurrentSlot) >= mSlotCount) {
+ #if DEBUG_POINTERS
+             if (newSlot) {
+@@ -8501,6 +8543,14 @@ YetiTpInputMapper::YetiTpInputMapper(InputDevice* device) :
+ #endif
+ }
+ 
++void YetiTpInputMapper::clearGestureState() {
++    {
++        AutoMutex _l(mLock);
++        mYetiTpAccumulator.clearGestureState();
++        TouchInputMapper::clearGestureState();
++    }
++}
++
+ YetiTpInputMapper::~YetiTpInputMapper() {
+ }
+ 
+@@ -8670,7 +8720,6 @@ void YetiTpInputMapper::syncTouch(nsecs_t when, RawState* outState) {
+     }
+ 
+ #elif defined (SMARTPAD_TOUCHPAD_LONGPRESS_SOLUTION)  //SMARTPAD_TOUCHPAD_WITH_LEFT_RIGHT_AREA
+-
+     if(mPointerIdBits.count() == 0 && newPointerIdBits.count() == 1){
+         mLastCurson0LocationX = curson0LocationX;
+         mLastCurson0LocationY = curson0LocationY;
+diff --git a/services/inputflinger/InputReader.h b/services/inputflinger/InputReader.h
+index 84048b6..f44eb11 100644
+--- a/services/inputflinger/InputReader.h
++++ b/services/inputflinger/InputReader.h
+@@ -335,6 +335,8 @@ public:
+      * This method may be called on any thread (usually by the input manager). */
+     virtual void dump(String8& dump) = 0;
+ 
++    virtual void clearGestureState(const char* deviceName) = 0;
++
+     /* Called by the heatbeat to ensures that the reader has not deadlocked. */
+     virtual void monitor() = 0;
+ 
+@@ -476,7 +478,8 @@ public:
+             ssize_t repeat, int32_t token);
+     virtual void cancelVibrate(int32_t deviceId, int32_t token);
+ 
+-    virtual int32_t updateKeyboardMetaState(int32_t deviceId, int32_t keyCode, bool down, int32_t oldMetaState); 
++    virtual int32_t updateKeyboardMetaState(int32_t deviceId, int32_t keyCode, bool down, int32_t oldMetaState);
++    virtual void clearGestureState(const char* deviceName);
+ 
+ protected:
+     // These members are protected so they can be instrumented by test cases.
+@@ -656,6 +659,7 @@ public:
+         return value;
+     }
+     int32_t updateKeyboardMetaState(int32_t keyCode, bool down, int32_t oldMetaState);
++    void clearGestureState();
+ 
+ private:
+     InputReaderContext* mContext;
+@@ -1054,6 +1058,7 @@ public:
+     virtual void fadePointer();
+ 
+     virtual int32_t updateKeyboardMetaState(int32_t keyCode, bool down, int32_t oldMetaState);
++    virtual void clearGestureState();
+ 
+ protected:
+     InputDevice* mDevice;
+@@ -1300,6 +1305,7 @@ public:
+     virtual void cancelTouch(nsecs_t when);
+     virtual void timeoutExpired(nsecs_t when);
+     virtual void updateExternalStylusState(const StylusState& state);
++    virtual void clearGestureState();
+ 
+ protected:
+     CursorButtonAccumulator mCursorButtonAccumulator;
+@@ -2061,6 +2067,7 @@ public:
+     void finishSync();
+     bool hasStylus() const;
+     void setSlotsSection();
++    void clearGestureState() { clearSlots(0); }
+ 
+     inline size_t getSlotCount() const { return mSlotCount; }
+     inline const Slot* getSlot(size_t index) const { return &mSlots[index]; }
+@@ -2086,6 +2093,7 @@ public:
+ 
+     virtual void reset(nsecs_t when);
+     virtual void process(const RawEvent* rawEvent);
++    virtual void clearGestureState();
+ 
+ protected:
+     virtual void syncTouch(nsecs_t when, RawState* outState);
+@@ -2096,6 +2104,7 @@ protected:
+ #endif //SMARTPAD_TOUCHPAD_LONGPRESS_SOLUTION
+ private:
+     YetiTpAccumulator mYetiTpAccumulator;
++    Mutex mLock;
+ 
+ #ifdef SMARTPAD_TOUCHPAD_LONGPRESS_SOLUTION
+     nsecs_t mSyncTime;
