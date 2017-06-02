@@ -2,9 +2,9 @@ commit 5c2c14ea90571e57f9bb40f55740c6f1de620e2b
 Author: liuzz4 <liuzz4@lenovo.com>
 Date:   Wed Apr 19 16:55:26 2017 +0800
 
-    <YETI_N><touchpad><liuzz4> add touchpad disable function
+        <liuzz4> add touchpad disable function
     
-        [issue] [YETIN-456] fixed
+
     
         [rootcause]
     
